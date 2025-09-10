@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 
 export default function GoldeneGerstePage() {
   const [consentState, setConsentState] = useState<string>("–")
@@ -8,6 +8,9 @@ export default function GoldeneGerstePage() {
   const [showModal, setShowModal] = useState(false)
   const [statChecked, setStatChecked] = useState(false)
   const [mktChecked, setMktChecked] = useState(false)
+  const heroVideoRef = useRef<HTMLVideoElement>(null)
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false)
+  const [isVideoMuted, setIsVideoMuted] = useState(true)
 
   const CONSENT_KEY = "gg-consent-v1"
 
@@ -44,7 +47,6 @@ export default function GoldeneGerstePage() {
     }
     updateConsentBadge()
 
-    // Handle navigation
     const handleHashChange = () => {
       const hash = window.location.hash || "#home"
       const links = document.querySelectorAll("header nav a")
@@ -65,13 +67,10 @@ export default function GoldeneGerstePage() {
       const currentScrollY = window.scrollY
 
       if (currentScrollY < 100) {
-        // Always show header at top of page
         header?.classList.remove("hidden")
       } else if (currentScrollY > lastScrollY) {
-        // Scrolling down - hide header
         header?.classList.add("hidden")
       } else {
-        // Scrolling up - show header
         header?.classList.remove("hidden")
       }
 
@@ -123,6 +122,25 @@ export default function GoldeneGerstePage() {
     setShowCookieBanner(true)
   }
 
+  const toggleHeroVideo = () => {
+    if (heroVideoRef.current) {
+      if (heroVideoRef.current.paused) {
+        heroVideoRef.current.play()
+        setIsVideoPlaying(true)
+      } else {
+        heroVideoRef.current.pause()
+        setIsVideoPlaying(false)
+      }
+    }
+  }
+
+  const toggleVideoMute = () => {
+    if (heroVideoRef.current) {
+      heroVideoRef.current.muted = !heroVideoRef.current.muted
+      setIsVideoMuted(heroVideoRef.current.muted)
+    }
+  }
+
   return (
     <>
       <header>
@@ -152,35 +170,80 @@ export default function GoldeneGerstePage() {
         </div>
       </header>
 
-      <main style={{ paddingTop: "80px" }}>
-        {/* HOME */}
-        <section id="home" aria-labelledby="h-home">
-          <h1 id="h-home">Goldene Gerste – Bier mit Charakter</h1>
-          <p className="lead">
+      <div className="hero-video-fullscreen">
+        <video
+          ref={heroVideoRef}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          onPlay={() => setIsVideoPlaying(true)}
+          onPause={() => setIsVideoPlaying(false)}
+        >
+          <source src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Bierglas_Werbevideo_mit_Logo-H43Hd72VM650teAe5vmFWH1gMlNGKf.mp4" type="video/mp4" />
+          Ihr Browser unterstützt das Video-Element nicht.
+        </video>
+
+        <div className="hero-video-content">
+          <h1>Goldene Gerste – Bier mit Charakter</h1>
+          <p>
             Handwerklich gebraut in Stuttgart – klare Rezepte, ehrliche Zutaten und ein Einkaufserlebnis ohne
-            Schnickschnack. <span className="pill">ab 18</span>
+            Schnickschnack.
+          </p>
+          <div style={{ display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap" }}>
+            <a className="btn primary" href="#shop">
+              Zum Sortiment
+            </a>
+            <a className="btn ghost" href="#about">
+              Unsere Story
+            </a>
+          </div>
+        </div>
+
+        <div className="hero-video-controls">
+          <button
+            className="video-control-btn"
+            onClick={toggleHeroVideo}
+            title={isVideoPlaying ? "Video pausieren" : "Video abspielen"}
+          >
+            {isVideoPlaying ? (
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
+              </svg>
+            ) : (
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+            )}
+          </button>
+          <button
+            className="video-control-btn"
+            onClick={toggleVideoMute}
+            title={isVideoMuted ? "Ton einschalten" : "Ton ausschalten"}
+          >
+            {isVideoMuted ? (
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z" />
+              </svg>
+            ) : (
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" />
+              </svg>
+            )}
+          </button>
+        </div>
+      </div>
+
+      <main style={{ paddingTop: "0" }}>
+        <section id="home" aria-labelledby="h-home" style={{ marginTop: "40px" }}>
+          <h2 id="h-home">Willkommen bei Goldene Gerste</h2>
+          <p className="lead">
+            Transparenz bei Zutaten und Informationen, keine Dark Patterns – Humor bei den Namen, Ernst bei der
+            Qualität. <span className="pill">ab 18</span>
           </p>
 
-          <div className="hero">
-            <div>
-              <img
-                src="/images/goldene-gerste-logo.png"
-                alt="Goldene Gerste Logo"
-                className="w-40 h-40 my-3 rounded-full border-2 border-white/22 shadow-2xl object-cover"
-              />
-              <p className="muted" style={{ margin: "6px 0 14px" }}>
-                Transparenz bei Zutaten und Informationen, keine Dark Patterns – Humor bei den Namen, Ernst bei der
-                Qualität.
-              </p>
-              <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
-                <a className="btn primary" href="#shop">
-                  Zum Sortiment
-                </a>
-                <a className="btn ghost" href="#about">
-                  Unsere Story
-                </a>
-              </div>
-            </div>
+          <div className="grid">
             <div className="card">
               <h3>Werte & Versprechen</h3>
               <ul className="list-legal">
@@ -189,15 +252,31 @@ export default function GoldeneGerstePage() {
                 <li>Schonender Umgang mit Ressourcen.</li>
               </ul>
             </div>
+            <div className="card">
+              <img
+                src="/images/goldene-gerste-logo.png"
+                alt="Goldene Gerste Logo"
+                className="w-32 h-32 mx-auto mb-4 rounded-full border-2 border-white/22 shadow-2xl object-cover"
+              />
+              <p className="text-center">
+                Handwerklich gebraut in Stuttgart mit Leidenschaft für Qualität und Transparenz.
+              </p>
+            </div>
           </div>
         </section>
 
-        {/* SHOP */}
         <section id="shop" aria-labelledby="h-shop">
           <h2 id="h-shop">Sortiment</h2>
           <p>Vier Sorten, vier Charaktere. Jeweils in der 0,5-l-Mehrwegflasche und als 6er-Träger.</p>
           <div className="grid">
             <div className="card">
+              <div className="product-image">
+                <img
+                  src="/images/pils-bottle.png"
+                  alt="Goldene Gerste Pils mit Stil - 0,5l Flasche"
+                  className="w-full h-48 object-contain mb-4"
+                />
+              </div>
               <h3>„Pils mit Stil" – Pils</h3>
               <p>Knackig herb, feine Bittere, klarer Ausklang.</p>
               <p>
@@ -224,6 +303,13 @@ export default function GoldeneGerstePage() {
             </div>
 
             <div className="card">
+              <div className="product-image">
+                <img
+                  src="/images/kellerpils-bottle.png"
+                  alt="Kellerkönig Kellerpils - 0,5l Flasche"
+                  className="w-full h-48 object-contain mb-4"
+                />
+              </div>
               <h3>„Kellerkönig" – Kellerpils</h3>
               <p>Naturtrüb, samtig und hopfig-frisch.</p>
               <p>
@@ -250,6 +336,13 @@ export default function GoldeneGerstePage() {
             </div>
 
             <div className="card">
+              <div className="product-image">
+                <img
+                  src="/images/hefeweizen-bottle.jpg"
+                  alt="Goldene Gerste Wolkenweizen Hefeweizen - 0,5l Flasche"
+                  className="w-full h-48 object-contain mb-4"
+                />
+              </div>
               <h3>„Wolkenweizen" – Hefeweizen</h3>
               <p>Banane & Nelke in Balance, cremige Perlage.</p>
               <p>
@@ -276,6 +369,13 @@ export default function GoldeneGerstePage() {
             </div>
 
             <div className="card">
+              <div className="product-image">
+                <img
+                  src="/images/helles-bottle.jpg"
+                  alt="Goldene Gerste Goldlicht Helles - 0,5l Flasche"
+                  className="w-full h-48 object-contain mb-4"
+                />
+              </div>
               <h3>„Goldlicht" – Helles</h3>
               <p>Feinmalzig, mild und süffig – Münchner Stil.</p>
               <p>
@@ -303,7 +403,6 @@ export default function GoldeneGerstePage() {
           </div>
         </section>
 
-        {/* Versand / Lieferbedingungen */}
         <section id="shipping" aria-labelledby="h-ship">
           <h2 id="h-ship">Versand & Lieferbedingungen</h2>
           <div className="grid">
@@ -345,7 +444,6 @@ export default function GoldeneGerstePage() {
           </div>
         </section>
 
-        {/* BLOG */}
         <section id="blog" aria-labelledby="h-blog">
           <h2 id="h-blog">Blog – Brautipps & Wissen</h2>
           <div className="grid">
@@ -364,7 +462,6 @@ export default function GoldeneGerstePage() {
           </div>
         </section>
 
-        {/* ABOUT */}
         <section id="about" aria-labelledby="h-about">
           <h2 id="h-about">Über uns</h2>
           <div className="grid">
@@ -384,7 +481,6 @@ export default function GoldeneGerstePage() {
           </div>
         </section>
 
-        {/* AGB */}
         <section id="agb" aria-labelledby="h-agb">
           <h2 id="h-agb">AGB – Kurzfassung</h2>
           <ol>
@@ -421,7 +517,6 @@ export default function GoldeneGerstePage() {
           </ol>
         </section>
 
-        {/* Widerruf */}
         <section id="widerruf" aria-labelledby="h-wid">
           <h2 id="h-wid">Widerrufsbelehrung</h2>
           <p>
@@ -442,7 +537,6 @@ Datum, Unterschrift (nur bei Papier)`}
           </details>
         </section>
 
-        {/* IMPRESSUM */}
         <section id="impressum" aria-labelledby="h-imp">
           <h2 id="h-imp">Impressum (§ 5 DDG)</h2>
           <div className="grid">
@@ -471,7 +565,6 @@ Datum, Unterschrift (nur bei Papier)`}
           </div>
         </section>
 
-        {/* DATENSCHUTZ */}
         <section id="datenschutz" aria-labelledby="h-ds">
           <h2 id="h-ds">Datenschutzerklärung – Kurzfassung</h2>
           <div className="grid">
@@ -508,7 +601,6 @@ Datum, Unterschrift (nur bei Papier)`}
           </p>
         </section>
 
-        {/* Cookies */}
         <section id="cookies" aria-labelledby="h-cookie">
           <h2 id="h-cookie">Cookies & Endgeräte-Speicherung (§ 25 TDDDG)</h2>
           <p>
@@ -529,7 +621,6 @@ Datum, Unterschrift (nur bei Papier)`}
           </div>
         </section>
 
-        {/* Kontakt */}
         <section id="kontakt" aria-labelledby="h-kontakt">
           <h2 id="h-kontakt">Kontakt</h2>
           <div className="card">
@@ -547,7 +638,6 @@ Datum, Unterschrift (nur bei Papier)`}
         </p>
       </footer>
 
-      {/* Cookie Banner */}
       <div
         className={`cookie ${showCookieBanner ? "show" : ""}`}
         role="dialog"
@@ -576,7 +666,6 @@ Datum, Unterschrift (nur bei Papier)`}
         </div>
       </div>
 
-      {/* Cookie Preferences Modal */}
       <div className={`modal ${showModal ? "show" : ""}`}>
         <div className="box">
           <h3>Cookie-Einstellungen</h3>
