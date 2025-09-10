@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState, useRef } from "react"
+import ContactForm from "../components/contact-form" // Fixed import path
 
 export default function GoldeneGerstePage() {
   const [consentState, setConsentState] = useState<string>("–")
@@ -49,7 +50,7 @@ export default function GoldeneGerstePage() {
 
     const handleHashChange = () => {
       const hash = window.location.hash || "#home"
-      const links = document.querySelectorAll("header nav a")
+      const links = document.querySelectorAll("nav.main-navigation a")
       links.forEach((a) => {
         const href = a.getAttribute("href")
         a.classList.toggle("active", href === hash)
@@ -63,7 +64,7 @@ export default function GoldeneGerstePage() {
     let ticking = false
 
     const updateHeader = () => {
-      const header = document.querySelector("header")
+      const header = document.querySelector("nav.main-navigation")
       const currentScrollY = window.scrollY
 
       if (currentScrollY < 100) {
@@ -143,33 +144,6 @@ export default function GoldeneGerstePage() {
 
   return (
     <>
-      <header>
-        <div className="nav">
-          <img
-            src="/images/goldene-gerste-logo.png"
-            alt="Goldene Gerste Logo"
-            className="w-11 h-11 rounded-full border border-white/20 shadow-lg object-cover"
-          />
-          <div className="brand">
-            <b>Goldene Gerste</b> • Stuttgart
-          </div>
-          <nav aria-label="Hauptnavigation">
-            <a href="#home" className="active">
-              Home
-            </a>
-            <a href="#shop">Shop</a>
-            <a href="#shipping">Versand</a>
-            <a href="#agb">AGB</a>
-            <a href="#widerruf">Widerruf</a>
-            <a href="#blog">Blog</a>
-            <a href="#about">Über uns</a>
-            <a href="#impressum">Impressum</a>
-            <a href="#datenschutz">Datenschutz</a>
-            <a href="#cookies">Cookies</a>
-          </nav>
-        </div>
-      </header>
-
       <div className="hero-video-fullscreen">
         <video
           ref={heroVideoRef}
@@ -184,22 +158,6 @@ export default function GoldeneGerstePage() {
           <source src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Bierglas_Werbevideo_mit_Logo-H43Hd72VM650teAe5vmFWH1gMlNGKf.mp4" type="video/mp4" />
           Ihr Browser unterstützt das Video-Element nicht.
         </video>
-
-        <div className="hero-video-content">
-          <h1>Goldene Gerste – Bier mit Charakter</h1>
-          <p>
-            Handwerklich gebraut in Stuttgart – klare Rezepte, ehrliche Zutaten und ein Einkaufserlebnis ohne
-            Schnickschnack.
-          </p>
-          <div style={{ display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap" }}>
-            <a className="btn primary" href="#shop">
-              Zum Sortiment
-            </a>
-            <a className="btn ghost" href="#about">
-              Unsere Story
-            </a>
-          </div>
-        </div>
 
         <div className="hero-video-controls">
           <button
@@ -234,6 +192,45 @@ export default function GoldeneGerstePage() {
           </button>
         </div>
       </div>
+
+      <div className="hero-content-below">
+        <h1>Goldene Gerste – Bier mit Charakter</h1>
+        <p>
+          Handwerklich gebraut in Stuttgart – klare Rezepte, ehrliche Zutaten und ein Einkaufserlebnis ohne
+          Schnickschnack.
+        </p>
+        <div style={{ display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap" }}>
+          <a className="btn primary" href="#shop">
+            Zum Sortiment
+          </a>
+          <a className="btn ghost" href="#about">
+            Unsere Story
+          </a>
+        </div>
+      </div>
+
+      <nav className="main-navigation" aria-label="Hauptnavigation">
+        <div className="nav-container">
+          <img src="/images/goldene-gerste-logo.png" alt="Goldene Gerste Logo" className="nav-logo" />
+          <div className="nav-brand">
+            <b>Goldene Gerste</b> • Stuttgart
+          </div>
+          <div className="nav-links">
+            <a href="#home" className="active">
+              Home
+            </a>
+            <a href="#shop">Shop</a>
+            <a href="#shipping">Versand</a>
+            <a href="#agb">AGB</a>
+            <a href="#widerruf">Widerruf</a>
+            <a href="#blog">Blog</a>
+            <a href="#about">Über uns</a>
+            <a href="#impressum">Impressum</a>
+            <a href="#datenschutz">Datenschutz</a>
+            <a href="#cookies">Cookies</a>
+          </div>
+        </div>
+      </nav>
 
       <main style={{ paddingTop: "0" }}>
         <section id="home" aria-labelledby="h-home" style={{ marginTop: "40px" }}>
@@ -623,11 +620,13 @@ Datum, Unterschrift (nur bei Papier)`}
 
         <section id="kontakt" aria-labelledby="h-kontakt">
           <h2 id="h-kontakt">Kontakt</h2>
-          <div className="card">
-            <p>
-              <b>E-Mail:</b> hallo@goldenegerste.de • <b>Telefon:</b> +49 (0)711 123456-0
-            </p>
-          </div>
+          <p>
+            Fragen? Schreiben Sie uns gerne eine E-Mail an{" "}
+            <a href="mailto:info@goldene-gerste.de">info@goldene-gerste.de</a> oder rufen Sie uns an unter Tel. +49
+            (0)123 4567890.
+          </p>
+          <p>Oder nutzen Sie unser Kontaktformular:</p>
+          <ContactForm />
         </section>
       </main>
 
