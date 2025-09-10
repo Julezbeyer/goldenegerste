@@ -12,6 +12,7 @@ export default function GoldeneGerstePage() {
   const heroVideoRef = useRef<HTMLVideoElement>(null)
   const [isVideoPlaying, setIsVideoPlaying] = useState(false)
   const [isVideoMuted, setIsVideoMuted] = useState(true)
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const CONSENT_KEY = "gg-consent-v1"
 
@@ -39,6 +40,14 @@ export default function GoldeneGerstePage() {
           ? `Benutzerdefiniert (${c.stat ? "Statistik" : ""}${c.stat && c.mkt ? ", " : ""}${c.mkt ? "Marketing" : ""})`
           : "Nur notwendig"
     setConsentState(label)
+  }
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen)
+  }
+
+  const handleNavClick = () => {
+    setIsMenuOpen(false)
   }
 
   useEffect(() => {
@@ -215,19 +224,47 @@ export default function GoldeneGerstePage() {
           <div className="nav-brand">
             <b>Goldene Gerste</b> • Stuttgart
           </div>
-          <div className="nav-links">
-            <a href="#home" className="active">
+          <button
+            className={`hamburger ${isMenuOpen ? "active" : ""}`}
+            onClick={toggleMenu}
+            aria-label="Menü öffnen/schließen"
+            aria-expanded={isMenuOpen}
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+          <div className={`nav-links ${isMenuOpen ? "open" : ""}`}>
+            <a href="#home" className="active" onClick={handleNavClick}>
               Home
             </a>
-            <a href="#shop">Shop</a>
-            <a href="#shipping">Versand</a>
-            <a href="#agb">AGB</a>
-            <a href="#widerruf">Widerruf</a>
-            <a href="#blog">Blog</a>
-            <a href="#about">Über uns</a>
-            <a href="#impressum">Impressum</a>
-            <a href="#datenschutz">Datenschutz</a>
-            <a href="#cookies">Cookies</a>
+            <a href="#shop" onClick={handleNavClick}>
+              Shop
+            </a>
+            <a href="#shipping" onClick={handleNavClick}>
+              Versand
+            </a>
+            <a href="#agb" onClick={handleNavClick}>
+              AGB
+            </a>
+            <a href="#widerruf" onClick={handleNavClick}>
+              Widerruf
+            </a>
+            <a href="#blog" onClick={handleNavClick}>
+              Blog
+            </a>
+            <a href="#about" onClick={handleNavClick}>
+              Über uns
+            </a>
+            <a href="#impressum" onClick={handleNavClick}>
+              Impressum
+            </a>
+            <a href="#datenschutz" onClick={handleNavClick}>
+              Datenschutz
+            </a>
+            <a href="#cookies" onClick={handleNavClick}>
+              Cookies
+            </a>
           </div>
         </div>
       </nav>
