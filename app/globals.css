@@ -46,7 +46,7 @@
   --blue-900: #0b1220;
   --blue-800: #0f172a;
   --blue-850: #0d1425;
-  --text: #e8edf6;
+  --text: #1f2937;
   --radius: 16px;
   --shadow: 0 12px 36px rgba(0, 0, 0, 0.35);
   --max: 1120px;
@@ -106,12 +106,13 @@
 html,
 body {
   margin: 0;
-  background: linear-gradient(180deg, var(--blue-900), var(--blue-850) 25%, var(--blue-900));
-  color: var(--text);
+  background: white;
+  color: #333;
   font-family: var(--font-sans), system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, "Helvetica Neue", Arial,
     sans-serif;
   line-height: 1.6;
   min-height: 100vh;
+  padding-top: 80px; /* Account for fixed header */
 }
 
 a {
@@ -149,22 +150,18 @@ nav:not(.main-navigation) {
   display: none; /* Hide old nav that's not the main navigation */
 }
 
-/* Main Navigation positioned below hero video */
+/* Main Navigation positioned at the top */
 .main-navigation {
-  position: sticky;
+  position: fixed;
   top: 0;
-  z-index: 40;
-  background: rgba(6, 10, 20, 0.95);
+  left: 0;
+  right: 0;
+  z-index: 50;
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: saturate(140%) blur(12px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  transform: translateY(0);
-  transition: transform 0.3s ease-in-out;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
   margin: 0 auto;
   max-width: 100%;
-}
-
-.main-navigation.hidden {
-  transform: translateY(-100%);
 }
 
 .nav-container {
@@ -243,7 +240,7 @@ nav:not(.main-navigation) {
   padding: 8px 12px;
   border-radius: 10px;
   transition: background-color 0.2s;
-  color: var(--text);
+  color: #1f2937;
   text-decoration: none;
 }
 
@@ -263,12 +260,12 @@ main {
 }
 
 section {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: var(--radius);
   padding: 28px;
   margin: 22px 0;
-  box-shadow: var(--shadow);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
@@ -289,11 +286,11 @@ h3 {
 }
 
 .lead {
-  color: #e9d5ff;
+  color: #475569;
 }
 
 .muted {
-  color: #a1a1aa;
+  color: #6b7280;
 }
 
 .grid {
@@ -303,10 +300,11 @@ h3 {
 }
 
 .card {
-  background: rgba(15, 23, 42, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: var(--radius-sm);
   padding: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .card ul.list-legal li {
@@ -315,11 +313,13 @@ h3 {
 
 .pill {
   display: inline-block;
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(0, 0, 0, 0.14);
   border-radius: 999px;
   padding: 2px 8px;
   font-size: 0.85em;
   margin: 2px 6px 2px 0;
+  background: #f8fafc;
+  color: #374151;
 }
 
 .btn {
@@ -343,12 +343,12 @@ h3 {
 
 .btn.ghost {
   background: transparent;
-  color: var(--text);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #1f2937;
+  border: 1px solid rgba(0, 0, 0, 0.18);
 }
 
 .btn.ghost:hover {
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(0, 0, 0, 0.04);
 }
 
 .btn:disabled {
@@ -376,13 +376,14 @@ table {
 
 th,
 td {
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.08);
   padding: 8px;
   text-align: left;
 }
 
 th {
-  background: rgba(255, 255, 255, 0.06);
+  background: #f8fafc;
+  color: #111827;
 }
 
 /* Hero Section */
@@ -409,13 +410,13 @@ th {
 }
 
 .hero-content-below {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: var(--radius);
   padding: 40px 28px;
   margin: 0 auto 22px;
   max-width: var(--max);
-  box-shadow: var(--shadow);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.1);
   text-align: center;
 }
 
@@ -428,7 +429,7 @@ th {
 .hero-content-below p {
   font-size: clamp(16px, 2.5vw, 20px);
   margin-bottom: 24px;
-  color: var(--text);
+  color: #334155;
 }
 
 .hero-video-controls {
@@ -579,17 +580,17 @@ pre {
 
 .form-group label {
   font-weight: 600;
-  color: var(--text);
+  color: #1f2937;
   font-size: 16px;
 }
 
 .form-group input,
 .form-group textarea {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: #fff;
+  border: 1px solid #e5e7eb;
   border-radius: 8px;
   padding: 12px 16px;
-  color: var(--text);
+  color: #111827;
   font-size: 16px;
   font-family: inherit;
   transition: all 0.2s ease;
@@ -599,7 +600,7 @@ pre {
 .form-group textarea:focus {
   outline: none;
   border-color: var(--gold);
-  background: rgba(255, 255, 255, 0.08);
+  background: #fff;
   box-shadow: 0 0 0 3px rgba(245, 194, 67, 0.1);
 }
 

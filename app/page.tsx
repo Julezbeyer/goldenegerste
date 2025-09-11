@@ -69,37 +69,9 @@ export default function GoldeneGerstePage() {
     handleHashChange()
     window.addEventListener("hashchange", handleHashChange)
 
-    let lastScrollY = window.scrollY
-    let ticking = false
-
-    const updateHeader = () => {
-      const header = document.querySelector("nav.main-navigation")
-      const currentScrollY = window.scrollY
-
-      if (currentScrollY < 100) {
-        header?.classList.remove("hidden")
-      } else if (currentScrollY > lastScrollY) {
-        header?.classList.add("hidden")
-      } else {
-        header?.classList.remove("hidden")
-      }
-
-      lastScrollY = currentScrollY
-      ticking = false
-    }
-
-    const handleScroll = () => {
-      if (!ticking) {
-        requestAnimationFrame(updateHeader)
-        ticking = true
-      }
-    }
-
-    window.addEventListener("scroll", handleScroll, { passive: true })
 
     return () => {
       window.removeEventListener("hashchange", handleHashChange)
-      window.removeEventListener("scroll", handleScroll)
     }
   }, [])
 
@@ -153,6 +125,57 @@ export default function GoldeneGerstePage() {
 
   return (
     <>
+      <nav className="main-navigation" aria-label="Hauptnavigation">
+        <div className="nav-container">
+          <img src="/images/goldene-gerste-logo.png" alt="Goldene Gerste Logo" className="nav-logo" />
+          <div className="nav-brand">
+            <b>Goldene Gerste</b> • Stuttgart
+          </div>
+          <button
+            className={`hamburger ${isMenuOpen ? "active" : ""}`}
+            onClick={toggleMenu}
+            aria-label="Menü öffnen/schließen"
+            aria-expanded={isMenuOpen}
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+          <div className={`nav-links ${isMenuOpen ? "open" : ""}`}>
+            <a href="#home" className="active" onClick={handleNavClick}>
+              Home
+            </a>
+            <a href="#shop" onClick={handleNavClick}>
+              Shop
+            </a>
+            <a href="#shipping" onClick={handleNavClick}>
+              Versand
+            </a>
+            <a href="#agb" onClick={handleNavClick}>
+              AGB
+            </a>
+            <a href="#widerruf" onClick={handleNavClick}>
+              Widerruf
+            </a>
+            <a href="#blog" onClick={handleNavClick}>
+              Blog
+            </a>
+            <a href="#about" onClick={handleNavClick}>
+              Über uns
+            </a>
+            <a href="#impressum" onClick={handleNavClick}>
+              Impressum
+            </a>
+            <a href="#datenschutz" onClick={handleNavClick}>
+              Datenschutz
+            </a>
+            <a href="#cookies" onClick={handleNavClick}>
+              Cookies
+            </a>
+          </div>
+        </div>
+      </nav>
+
       <div className="hero-video-fullscreen">
         <video
           ref={heroVideoRef}
@@ -217,57 +240,6 @@ export default function GoldeneGerstePage() {
           </a>
         </div>
       </div>
-
-      <nav className="main-navigation" aria-label="Hauptnavigation">
-        <div className="nav-container">
-          <img src="/images/goldene-gerste-logo.png" alt="Goldene Gerste Logo" className="nav-logo" />
-          <div className="nav-brand">
-            <b>Goldene Gerste</b> • Stuttgart
-          </div>
-          <button
-            className={`hamburger ${isMenuOpen ? "active" : ""}`}
-            onClick={toggleMenu}
-            aria-label="Menü öffnen/schließen"
-            aria-expanded={isMenuOpen}
-          >
-            <span></span>
-            <span></span>
-            <span></span>
-          </button>
-          <div className={`nav-links ${isMenuOpen ? "open" : ""}`}>
-            <a href="#home" className="active" onClick={handleNavClick}>
-              Home
-            </a>
-            <a href="#shop" onClick={handleNavClick}>
-              Shop
-            </a>
-            <a href="#shipping" onClick={handleNavClick}>
-              Versand
-            </a>
-            <a href="#agb" onClick={handleNavClick}>
-              AGB
-            </a>
-            <a href="#widerruf" onClick={handleNavClick}>
-              Widerruf
-            </a>
-            <a href="#blog" onClick={handleNavClick}>
-              Blog
-            </a>
-            <a href="#about" onClick={handleNavClick}>
-              Über uns
-            </a>
-            <a href="#impressum" onClick={handleNavClick}>
-              Impressum
-            </a>
-            <a href="#datenschutz" onClick={handleNavClick}>
-              Datenschutz
-            </a>
-            <a href="#cookies" onClick={handleNavClick}>
-              Cookies
-            </a>
-          </div>
-        </div>
-      </nav>
 
       <main style={{ paddingTop: "0" }}>
         <section id="home" aria-labelledby="h-home" style={{ marginTop: "40px" }}>
